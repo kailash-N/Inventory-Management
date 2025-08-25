@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Inventory MS</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active" data-page="dashboard">Dashboard</a></li>
+                <li><a href="#products" class="nav-link" data-page="products">Products</a></li>
+                <li><a href="#stock" class="nav-link" data-page="stock">Stock</a></li>
+                <li><a href="#purchases" class="nav-link" data-page="purchases">Purchases</a></li>
+                <li><a href="#sales" class="nav-link" data-page="sales">Sales</a></li>
+                <li><a href="#customers" class="nav-link" data-page="customers">Customers</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <h1>Dashboard</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Products</h3>
+                        <p id="total-products">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Low Stock Items</h3>
+                        <p id="low-stock">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Customers</h3>
+                        <p id="total-customers">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Monthly Sales</h3>
+                        <p id="monthly-sales">₹-</p>
+                    </div>
+                </div>
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <h3>Recent Activities</h3>
+                        <div id="recent-activities" class="activity-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Page -->
+            <div id="products" class="page">
+                <div class="page-header">
+                    <h1>Products</h1>
+                    <button class="btn btn-primary" onclick="openModal('product-modal')">Add Product</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="product-search" placeholder="Search products...">
+                    <select id="product-category-filter">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table id="products-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Stock Page -->
+            <div id="stock" class="page">
+                <div class="page-header">
+                    <h1>Stock Management</h1>
+                    <button class="btn btn-primary" onclick="openModal('stock-modal')">Update Stock</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="stock-search" placeholder="Search stock...">
+                    <select id="stock-filter">
+                        <option value="">All Items</option>
+                        <option value="low">Low Stock</option>
+                        <option value="out">Out of Stock</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table id="stock-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Available Qty</th>
+                                <th>Cost Price</th>
+                                <th>Selling Price</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Purchases Page -->
+            <div id="purchases" class="page">
+                <div class="page-header">
+                    <h1>Purchases</h1>
+                    <button class="btn btn-primary" onclick="openModal('purchase-modal')">Add Purchase</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="purchase-search" placeholder="Search purchases...">
+                    <input type="date" id="purchase-date-filter">
+                    <select id="purchase-payment-filter">
+                        <option value="">All Payments</option>
+                        <option value="true">Paid</option>
+                        <option value="false">Unpaid</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table id="purchases-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Cost Price</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Payment Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sales Page -->
+            <div id="sales" class="page">
+                <div class="page-header">
+                    <h1>Sales</h1>
+                    <button class="btn btn-primary" onclick="openModal('sale-modal')">Add Sale</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="sale-search" placeholder="Search sales...">
+                    <input type="date" id="sale-date-filter">
+                    <select id="sale-payment-filter">
+                        <option value="">All Payments</option>
+                        <option value="true">Paid</option>
+                        <option value="false">Unpaid</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table id="sales-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Selling Price</th>
+                                <th>Discount</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Payment Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Customers Page -->
+            <div id="customers" class="page">
+                <div class="page-header">
+                    <h1>Customers</h1>
+                    <button class="btn btn-primary" onclick="openModal('customer-modal')">Add Customer</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="customer-search" placeholder="Search customers...">
+                </div>
+                <div class="table-container">
+                    <table id="customers-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>GST No</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="product-modal-title">Add Product</h2>
+                <span class="close" onclick="closeModal('product-modal')">&times;</span>
+            </div>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="form-group">
+                    <label for="product-name">Product Name</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-description">Description</label>
+                    <textarea id="product-description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="product-category">Category</label>
+                    <input type="text" id="product-category">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('product-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stock Modal -->
+    <div id="stock-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Stock</h2>
+                <span class="close" onclick="closeModal('stock-modal')">&times;</span>
+            </div>
+            <form id="stock-form">
+                <div class="form-group">
+                    <label for="stock-product">Product</label>
+                    <select id="stock-product" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="stock-quantity">Available Quantity</label>
+                    <input type="number" id="stock-quantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock-cost-price">Cost Price</label>
+                    <input type="number" id="stock-cost-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock-selling-price">Selling Price</label>
+                    <input type="number" id="stock-selling-price" step="0.01" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('stock-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div id="purchase-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Purchase</h2>
+                <span class="close" onclick="closeModal('purchase-modal')">&times;</span>
+            </div>
+            <form id="purchase-form">
+                <div class="form-group">
+                    <label for="purchase-product">Product</label>
+                    <select id="purchase-product" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="purchase-quantity">Quantity</label>
+                    <input type="number" id="purchase-quantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="purchase-cost-price">Cost Price (per unit)</label>
+                    <input type="number" id="purchase-cost-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="purchase-serial-numbers">Serial Numbers (JSON format)</label>
+                    <textarea id="purchase-serial-numbers" placeholder='["SN001", "SN002"]'></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="purchase-is-paid"> Paid
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('purchase-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sale Modal -->
+    <div id="sale-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Sale</h2>
+                <span class="close" onclick="closeModal('sale-modal')">&times;</span>
+            </div>
+            <form id="sale-form">
+                <div class="form-group">
+                    <label for="sale-customer">Customer</label>
+                    <select id="sale-customer" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="sale-product">Product</label>
+                    <select id="sale-product" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="sale-quantity">Quantity</label>
+                    <input type="number" id="sale-quantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="sale-selling-price">Selling Price (per unit)</label>
+                    <input type="number" id="sale-selling-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="sale-discount">Discount (%)</label>
+                    <input type="number" id="sale-discount" step="0.01" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="sale-total-amount">Total Amount</label>
+                    <input type="number" id="sale-total-amount" step="0.01" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="sale-serial-numbers">Serial Numbers (JSON format)</label>
+                    <textarea id="sale-serial-numbers" placeholder='["SN001", "SN002"]'></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="sale-is-paid"> Paid
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('sale-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Customer Modal -->
+    <div id="customer-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="customer-modal-title">Add Customer</h2>
+                <span class="close" onclick="closeModal('customer-modal')">&times;</span>
+            </div>
+            <form id="customer-form">
+                <input type="hidden" id="customer-id">
+                <div class="form-group">
+                    <label for="customer-name">Name</label>
+                    <input type="text" id="customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-gst">GST Number</label>
+                    <input type="text" id="customer-gst">
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Phone Number</label>
+                    <input type="tel" id="customer-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Email</label>
+                    <input type="email" id="customer-email">
+                </div>
+                <div class="form-group">
+                    <label for="customer-address">Address</label>
+                    <textarea id="customer-address" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('customer-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        const API_BASE_URL = 'http://127.0.0.1:2004/api'; // Update with your backend URL
+        let currentPage = 'dashboard';
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            loadDashboardData();
+        });
+
+        // Initialize application
+        function initializeApp() {
+            // Navigation handling
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    showPage(page);
+                });
+            });
+
+            // Form submissions
+            document.getElementById('product-form').addEventListener('submit', handleProductSubmit);
+            document.getElementById('stock-form').addEventListener('submit', handleStockSubmit);
+            document.getElementById('purchase-form').addEventListener('submit', handlePurchaseSubmit);
+            document.getElementById('sale-form').addEventListener('submit', handleSaleSubmit);
+            document.getElementById('customer-form').addEventListener('submit', handleCustomerSubmit);
+
+            // Sale form calculations
+            document.getElementById('sale-quantity').addEventListener('input', calculateSaleTotal);
+            document.getElementById('sale-selling-price').addEventListener('input', calculateSaleTotal);
+            document.getElementById('sale-discount').addEventListener('input', calculateSaleTotal);
+
+            // Search and filter handlers
+            document.getElementById('product-search').addEventListener('input', filterProducts);
+            document.getElementById('product-category-filter').addEventListener('change', filterProducts);
+            document.getElementById('stock-search').addEventListener('input', filterStock);
+            document.getElementById('stock-filter').addEventListener('change', filterStock);
+            document.getElementById('purchase-search').addEventListener('input', filterPurchases);
+            document.getElementById('purchase-date-filter').addEventListener('change', filterPurchases);
+            document.getElementById('purchase-payment-filter').addEventListener('change', filterPurchases);
+            document.getElementById('sale-search').addEventListener('input', filterSales);
+            document.getElementById('sale-date-filter').addEventListener('change', filterSales);
+            document.getElementById('sale-payment-filter').addEventListener('change', filterSales);
+            document.getElementById('customer-search').addEventListener('input', filterCustomers);
+        }
+
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+            
+            currentPage = pageId;
+            
+            // Load page data
+            switch(pageId) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'products':
+                    loadProducts();
+                    loadProductCategories();
+                    break;
+                case 'stock':
+                    loadStock();
+                    loadProductsForDropdown('stock-product');
+                    break;
+                case 'purchases':
+                    loadPurchases();
+                    loadProductsForDropdown('purchase-product');
+                    break;
+                case 'sales':
+                    loadSales();
+                    loadCustomersForDropdown('sale-customer');
+                    loadProductsForDropdown('sale-product');
+                    break;
+                case 'customers':
+                    loadCustomers();
+                    break;
+            }
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            // Reset form
+            const form = document.querySelector(`#${modalId} form`);
+            if (form) form.reset();
+        }
+
+        // API functions
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            try {
+                const config = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                
+                if (data) {
+                    config.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                showNotification('API call failed: ' + error.message, 'error');
+                return null;
+            }
+        }
+
+        // Dashboard functions
+        async function loadDashboardData() {
+            const [products, customers, sales, lowStock] = await Promise.all([
+                apiCall('/products'),
+                apiCall('/customers'),
+                apiCall('/sales/monthly'),
+                apiCall('/stock/low')
+            ]);
+
+            if (products) document.getElementById('total-products').textContent = products.length;
+            if (customers) document.getElementById('total-customers').textContent = customers.length;
+            if (sales) document.getElementById('monthly-sales').textContent = `₹${sales.total || 0}`;
+            if (lowStock) document.getElementById('low-stock').textContent = lowStock.length;
+
+            loadRecentActivities();
+        }
+
+        async function loadRecentActivities() {
+            const activities = await apiCall('/activities/recent');
+            const container = document.getElementById('recent-activities');
+            
+            if (activities && activities.length > 0) {
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <span class="activity-type">${activity.type}</span>
+                        <span class="activity-desc">${activity.description}</span>
+                        <span class="activity-time">${new Date(activity.timestamp).toLocaleString()}</span>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<p>No recent activities</p>';
+            }
+        }
+
+        // Product functions
+        async function loadProducts() {
+            const products = await apiCall('/products');
+            if (products) {
+                displayProductsTable(products);
+            }
+        }
+
+        async function loadProductCategories() {
+            const categories = await apiCall('/products/categories');
+            if (categories) {
+                const select = document.getElementById('product-category-filter');
+                select.innerHTML = '<option value="">All Categories</option>' +
+                    categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+            }
+        }
+
+        function displayProductsTable(products) {
+            const tbody = document.querySelector('#products-table tbody');
+            tbody.innerHTML = products.map(product => `
+                <tr>
+                    <td>${product.product_id}</td>
+                    <td>${product.name}</td>
+                    <td>${product.category || 'N/A'}</td>
+                    <td>${product.description || 'N/A'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="editProduct(${product.product_id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.product_id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function handleProductSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('product-name').value,
+                description: document.getElementById('product-description').value,
+                category: document.getElementById('product-category').value
+            };
+
+            const productId = document.getElementById('product-id').value;
+            const endpoint = productId ? `/products/${productId}` : '/products';
+            const method = productId ? 'PUT' : 'POST';
+
+            const result = await apiCall(endpoint, method, formData);
+            
+            if (result) {
+                closeModal('product-modal');
+                loadProducts();
+                showNotification('Product saved successfully!', 'success');
+            }
+        }
+
+        async function editProduct(productId) {
+            const product = await apiCall(`/products/${productId}`);
+            if (product) {
+                document.getElementById('product-id').value = product.product_id;
+                document.getElementById('product-name').value = product.name;
+                document.getElementById('product-description').value = product.description || '';
+                document.getElementById('product-category').value = product.category || '';
+                document.getElementById('product-modal-title').textContent = 'Edit Product';
+                openModal('product-modal');
+            }
+        }
+
+        async function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                const result = await apiCall(`/products/${productId}`, 'DELETE');
+                if (result) {
+                    loadProducts();
+                    showNotification('Product deleted successfully!', 'success');
+                }
+            }
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('product-search').value.toLowerCase();
+            const categoryFilter = document.getElementById('product-category-filter').value;
+            
+            const rows = document.querySelectorAll('#products-table tbody tr');
+            rows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const category = row.cells[2].textContent;
+                
+                const matchesSearch = name.includes(searchTerm);
+                const matchesCategory = !categoryFilter || category === categoryFilter;
+                
+                row.style.display = matchesSearch && matchesCategory ? '' : 'none';
+            });
+        }
+
+        // Stock functions
+        async function loadStock() {
+            const stock = await apiCall('/stock');
+            if (stock) {
+                displayStockTable(stock);
+            }
+        }
+
+        function displayStockTable(stock) {
+            const tbody = document.querySelector('#stock-table tbody');
+            tbody.innerHTML = stock.map(item => `
+                <tr class="${item.available_quantity <= 5 ? 'low-stock' : ''}">
+                    <td>${item.product.name}</td>
+                    <td>${item.available_quantity}</td>
+                    <td>₹${item.cost_price}</td>
+                    <td>₹${item.selling_price}</td>
+                    <td>${new Date(item.last_updated).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="editStock(${item.stock_id})">Edit</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function handleStockSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                product_id: parseInt(document.getElementById('stock-product').value),
+                available_quantity: parseInt(document.getElementById('stock-quantity').value),
+                cost_price: parseFloat(document.getElementById('stock-cost-price').value),
+                selling_price: parseFloat(document.getElementById('stock-selling-price').value)
+            };
+
+            const result = await apiCall('/stock', 'POST', formData);
+            
+            if (result) {
+                closeModal('stock-modal');
+                loadStock();
+                showNotification('Stock updated successfully!', 'success');
+            }
+        }
+
+        function filterStock() {
+            const searchTerm = document.getElementById('stock-search').value.toLowerCase();
+            const filter = document.getElementById('stock-filter').value;
+            
+            const rows = document.querySelectorAll('#stock-table tbody tr');
+            rows.forEach(row => {
+                const productName = row.cells[0].textContent.toLowerCase();
+                const quantity = parseInt(row.cells[1].textContent);
+                
+                const matchesSearch = productName.includes(searchTerm);
+                let matchesFilter = true;
+                
+                if (filter === 'low') {
+                    matchesFilter = quantity <= 5;
+                } else if (filter === 'out') {
+                    matchesFilter = quantity === 0;
+                }
+                
+                row.style.display = matchesSearch && matchesFilter ? '' : 'none';
+            });
+        }
+
+        // Purchase functions
+        async function loadPurchases() {
+            const purchases = await apiCall('/purchases');
+            if (purchases) {
+                displayPurchasesTable(purchases);
+            }
+        }
+
+        function displayPurchasesTable(purchases) {
+            const tbody = document.querySelector('#purchases-table tbody');
+            tbody.innerHTML = purchases.map(purchase => `
+                <tr>
+                    <td>${purchase.purchase_id}</td>
+                    <td>${purchase.product.name}</td>
+                    <td>${purchase.quantity}</td>
+                    <td>₹${purchase.cost_price}</td>
+                    <td>₹${(purchase.quantity * purchase.cost_price).toFixed(2)}</td>
+                    <td>${new Date(purchase.purchase_date).toLocaleDateString()}</td>
+                    <td>
+                        <span class="status ${purchase.is_paid ? 'paid' : 'unpaid'}">
+                            ${purchase.is_paid ? 'Paid' : 'Unpaid'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="togglePaymentStatus('purchase', ${purchase.purchase_id}, ${!purchase.is_paid})">
+                            Mark as ${purchase.is_paid ? 'Unpaid' : 'Paid'}
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deletePurchase(${purchase.purchase_id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function handlePurchaseSubmit(e) {
+            e.preventDefault();
+            
+            const serialNumbers = document.getElementById('purchase-serial-numbers').value;
+            let parsedSerialNumbers = null;
+            
+            if (serialNumbers.trim()) {
+                try {
+                    parsedSerialNumbers = JSON.parse(serialNumbers);
+                } catch (error) {
+                    showNotification('Invalid JSON format for serial numbers', 'error');
+                    return;
+                }
+            }
+            
+            const formData = {
+                product_id: parseInt(document.getElementById('purchase-product').value),
+                quantity: parseInt(document.getElementById('purchase-quantity').value),
+                cost_price: parseFloat(document.getElementById('purchase-cost-price').value),
+                serial_no: parsedSerialNumbers,
+                is_paid: document.getElementById('purchase-is-paid').checked
+            };
+
+            const result = await apiCall('/purchases', 'POST', formData);
+            
+            if (result) {
+                closeModal('purchase-modal');
+                loadPurchases();
+                showNotification('Purchase added successfully!', 'success');
+            }
+        }
+
+        async function deletePurchase(purchaseId) {
+            if (confirm('Are you sure you want to delete this purchase?')) {
+                const result = await apiCall(`/purchases/${purchaseId}`, 'DELETE');
+                if (result) {
+                    loadPurchases();
+                    showNotification('Purchase deleted successfully!', 'success');
+                }
+            }
+        }
+
+        function filterPurchases() {
+            const searchTerm = document.getElementById('purchase-search').value.toLowerCase();
+            const dateFilter = document.getElementById('purchase-date-filter').value;
+            const paymentFilter = document.getElementById('purchase-payment-filter').value;
+            
+            const rows = document.querySelectorAll('#purchases-table tbody tr');
+            rows.forEach(row => {
+                const productName = row.cells[1].textContent.toLowerCase();
+                const dateText = row.cells[5].textContent;
+                const isPaid = row.cells[6].textContent.includes('Paid');
+                
+                const matchesSearch = productName.includes(searchTerm);
+                const matchesDate = !dateFilter || dateText.includes(new Date(dateFilter).toLocaleDateString());
+                let matchesPayment = true;
+                
+                if (paymentFilter === 'true') {
+                    matchesPayment = isPaid;
+                } else if (paymentFilter === 'false') {
+                    matchesPayment = !isPaid;
+                }
+                
+                row.style.display = matchesSearch && matchesDate && matchesPayment ? '' : 'none';
+            });
+        }
+
+        // Sale functions
+        async function loadSales() {
+            const sales = await apiCall('/sales');
+            if (sales) {
+                displaySalesTable(sales);
+            }
+        }
+
+        function displaySalesTable(sales) {
+            const tbody = document.querySelector('#sales-table tbody');
+            tbody.innerHTML = sales.map(sale => `
+                <tr>
+                    <td>${sale.sale_id}</td>
+                    <td>${sale.customer.name}</td>
+                    <td>${sale.product.name}</td>
+                    <td>${sale.quantity}</td>
+                    <td>₹${sale.selling_price}</td>
+                    <td>${sale.discount_percentage}%</td>
+                    <td>₹${sale.total_amount}</td>
+                    <td>${new Date(sale.sale_date).toLocaleDateString()}</td>
+                    <td>
+                        <span class="status ${sale.is_paid ? 'paid' : 'unpaid'}">
+                            ${sale.is_paid ? 'Paid' : 'Unpaid'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="togglePaymentStatus('sale', ${sale.sale_id}, ${!sale.is_paid})">
+                            Mark as ${sale.is_paid ? 'Unpaid' : 'Paid'}
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteSale(${sale.sale_id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function calculateSaleTotal() {
+            const quantity = parseFloat(document.getElementById('sale-quantity').value) || 0;
+            const sellingPrice = parseFloat(document.getElementById('sale-selling-price').value) || 0;
+            const discount = parseFloat(document.getElementById('sale-discount').value) || 0;
+            
+            const subtotal = quantity * sellingPrice;
+            const discountAmount = (subtotal * discount) / 100;
+            const total = subtotal - discountAmount;
+            
+            document.getElementById('sale-total-amount').value = total.toFixed(2);
+        }
+
+        async function handleSaleSubmit(e) {
+            e.preventDefault();
+            
+            const serialNumbers = document.getElementById('sale-serial-numbers').value;
+            let parsedSerialNumbers = null;
+            
+            if (serialNumbers.trim()) {
+                try {
+                    parsedSerialNumbers = JSON.parse(serialNumbers);
+                } catch (error) {
+                    showNotification('Invalid JSON format for serial numbers', 'error');
+                    return;
+                }
+            }
+            
+            const formData = {
+                customer_id: parseInt(document.getElementById('sale-customer').value),
+                product_id: parseInt(document.getElementById('sale-product').value),
+                quantity: parseInt(document.getElementById('sale-quantity').value),
+                selling_price: parseFloat(document.getElementById('sale-selling-price').value),
+                discount_percentage: parseFloat(document.getElementById('sale-discount').value),
+                total_amount: parseFloat(document.getElementById('sale-total-amount').value),
+                serial_numbers: parsedSerialNumbers,
+                is_paid: document.getElementById('sale-is-paid').checked
+            };
+
+            const result = await apiCall('/sales', 'POST', formData);
+            
+            if (result) {
+                closeModal('sale-modal');
+                loadSales();
+                showNotification('Sale added successfully!', 'success');
+            }
+        }
+
+        async function deleteSale(saleId) {
+            if (confirm('Are you sure you want to delete this sale?')) {
+                const result = await apiCall(`/sales/${saleId}`, 'DELETE');
+                if (result) {
+                    loadSales();
+                    showNotification('Sale deleted successfully!', 'success');
+                }
+            }
+        }
+
+        function filterSales() {
+            const searchTerm = document.getElementById('sale-search').value.toLowerCase();
+            const dateFilter = document.getElementById('sale-date-filter').value;
+            const paymentFilter = document.getElementById('sale-payment-filter').value;
+            
+            const rows = document.querySelectorAll('#sales-table tbody tr');
+            rows.forEach(row => {
+                const customerName = row.cells[1].textContent.toLowerCase();
+                const productName = row.cells[2].textContent.toLowerCase();
+                const dateText = row.cells[7].textContent;
+                const isPaid = row.cells[8].textContent.includes('Paid');
+                
+                const matchesSearch = customerName.includes(searchTerm) || productName.includes(searchTerm);
+                const matchesDate = !dateFilter || dateText.includes(new Date(dateFilter).toLocaleDateString());
+                let matchesPayment = true;
+                
+                if (paymentFilter === 'true') {
+                    matchesPayment = isPaid;
+                } else if (paymentFilter === 'false') {
+                    matchesPayment = !isPaid;
+                }
+                
+                row.style.display = matchesSearch && matchesDate && matchesPayment ? '' : 'none';
+            });
+        }
+
+        // Customer functions
+        async function loadCustomers() {
+            const customers = await apiCall('/customers');
+            if (customers) {
+                displayCustomersTable(customers);
+            }
+        }
+
+        function displayCustomersTable(customers) {
+            const tbody = document.querySelector('#customers-table tbody');
+            tbody.innerHTML = customers.map(customer => `
+                <tr>
+                    <td>${customer.c_id}</td>
+                    <td>${customer.name}</td>
+                    <td>${customer.gstno || 'N/A'}</td>
+                    <td>${customer.phone_no}</td>
+                    <td>${customer.email || 'N/A'}</td>
+                    <td>${customer.address}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="editCustomer(${customer.c_id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteCustomer(${customer.c_id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function handleCustomerSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('customer-name').value,
+                gstno: document.getElementById('customer-gst').value,
+                phone_no: document.getElementById('customer-phone').value,
+                email: document.getElementById('customer-email').value,
+                address: document.getElementById('customer-address').value
+            };
+
+            const customerId = document.getElementById('customer-id').value;
+            const endpoint = customerId ? `/customers/${customerId}` : '/customers';
+            const method = customerId ? 'PUT' : 'POST';
+
+            const result = await apiCall(endpoint, method, formData);
+            
+            if (result) {
+                closeModal('customer-modal');
+                loadCustomers();
+                showNotification('Customer saved successfully!', 'success');
+            }
+        }
+
+        async function editCustomer(customerId) {
+            const customer = await apiCall(`/customers/${customerId}`);
+            if (customer) {
+                document.getElementById('customer-id').value = customer.c_id;
+                document.getElementById('customer-name').value = customer.name;
+                document.getElementById('customer-gst').value = customer.gstno || '';
+                document.getElementById('customer-phone').value = customer.phone_no;
+                document.getElementById('customer-email').value = customer.email || '';
+                document.getElementById('customer-address').value = customer.address;
+                document.getElementById('customer-modal-title').textContent = 'Edit Customer';
+                openModal('customer-modal');
+            }
+        }
+
+        async function deleteCustomer(customerId) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                const result = await apiCall(`/customers/${customerId}`, 'DELETE');
+                if (result) {
+                    loadCustomers();
+                    showNotification('Customer deleted successfully!', 'success');
+                }
+            }
+        }
+
+        function filterCustomers() {
+            const searchTerm = document.getElementById('customer-search').value.toLowerCase();
+            
+            const rows = document.querySelectorAll('#customers-table tbody tr');
+            rows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const phone = row.cells[3].textContent.toLowerCase();
+                const email = row.cells[4].textContent.toLowerCase();
+                
+                const matches = name.includes(searchTerm) || phone.includes(searchTerm) || email.includes(searchTerm);
+                row.style.display = matches ? '' : 'none';
+            });
+        }
+
+        // Utility functions
+        async function loadProductsForDropdown(selectId) {
+            const products = await apiCall('/products');
+            if (products) {
+                const select = document.getElementById(selectId);
+                select.innerHTML = '<option value="">Select Product</option>' +
+                    products.map(product => `<option value="${product.product_id}">${product.name}</option>`).join('');
+            }
+        }
+
+        async function loadCustomersForDropdown(selectId) {
+            const customers = await apiCall('/customers');
+            if (customers) {
+                const select = document.getElementById(selectId);
+                select.innerHTML = '<option value="">Select Customer</option>' +
+                    customers.map(customer => `<option value="${customer.c_id}">${customer.name}</option>`).join('');
+            }
+        }
+
+        async function togglePaymentStatus(type, id, isPaid) {
+            const endpoint = type === 'purchase' ? `/purchases/${id}/payment` : `/sales/${id}/payment`;
+            const result = await apiCall(endpoint, 'PUT', { is_paid: isPaid });
+            
+            if (result) {
+                if (type === 'purchase') {
+                    loadPurchases();
+                } else {
+                    loadSales();
+                }
+                showNotification(`Payment status updated successfully!`, 'success');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            // Add to body
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
