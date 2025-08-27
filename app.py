@@ -137,8 +137,18 @@ def deleteProduct(productId):
             return jsonify({"error": "Not Found", "message": f"Product with id {productId} not found"}), 404
         session.delete(product)
         session.commit()
-        print("Product deleted successfully")
-        return "", 204
+        
+        products = session.query(Product).all()
+        result = [
+            {
+                "product_id": p.product_id, 
+                "name":p.name ,
+                "description":p.description,
+                "category":p.category
+            }
+            for p in products
+        ]
+        return jsonify(result), 200
     except Exception as e:
         session.rollback()
         return jsonify({"error": "Failed to delete product", "message": str(e)}), 500
@@ -325,7 +335,174 @@ def updateStock(stockId):
     finally:
         session.close()
 
+#customer
+@app.route("/api/customers", methods=["GET"])
+def getAllCustomers():
+    session = get_session()
+    try:
+        customers = session.query(Customer).all()
+        result = [
+            {
+                "c_id": customer.c_id,
+                "name": customer.name,
+                "gstno": customer.gstno,
+                "address": customer.address,
+                "phone_no": customer.phone_no,
+                "email": customer.email
+            }
+            for customer in customers
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error":"failed fetch customer details" , "message": str(e)}), 500
+    finally:
+        session.close()
 
+@app.route("/api/customers/<int:customerId>", methods=["GET"])
+def getSingleCustomer(customerId):
+    session = get_session()
+    try:
+        customer = session.query(Customer).filter_by(c_id = customerId).first()
+        if not customer:
+            return jsonify({"error":"Not Found" , "message":f"Customer with id {customerId} not found"}), 404
+        
+        result = {
+            "c_id": customer.c_id,
+            "name": customer.name,
+            "gstno": customer.gstno,
+            "address": customer.address,
+            "phone_no": customer.phone_no,
+            "email": customer.email
+        }
+
+        return jsonify(result) , 200
+    except Exception as e:
+        return jsonify({"error":"failed fetch customer details" , "message": str(e)}), 500
+    finally:
+        session.close()
+
+@app.route("/api/customers", methods = ["POST"])
+def createCustomer():
+    session = get_session()
+    try:
+        data = request.json
+
+        if not data:
+            return jsonify({"error": "Bad Request", "message": "No data provided"}), 400
+        
+        if not data.get("name"):
+            return jsonify({"error": "Bad Request", "message": "Customer name is required"}), 400
+
+        if not data.get("address"):
+            return jsonify({"error": "Bad Request", "message": "Customer address is required"}), 400
+        
+        if not data.get("phone_no"):
+            return jsonify({"error": "Bad Request", "message": "Customer phone no is required"}), 400
+        
+        newCustomer = Customer(
+            name = data.get("name"),
+            gstno = data.get("gstno"),
+            address = data.get("address"),
+            phone_no = data.get("phone_no"),
+            email = data.get("email")
+        )
+        session.add(newCustomer)
+        session.commit()
+
+        result = {
+            "c_id": newCustomer.c_id,
+            "name": newCustomer.name,
+            "gstno": newCustomer.gstno,
+            "address": newCustomer.address,
+            "phone_no": newCustomer.phone_no,
+            "email": newCustomer.email
+        }
+        return jsonify(result), 201
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": "Failed to create customer", "message": str(e)}), 500
+    finally:
+        session.close()
+
+@app.route("/api/customers/<int:customerId>", methods=["PUT"])
+def updateCustomer(customerId):
+    session = get_session()
+    try:
+        data = request.json
+        if not data:
+            return jsonify({"error": "Bad Request", "message": "No data provided"}), 400
+        
+        customer = session.query(Customer).filter_by(c_id=customerId).first()
+        if not customer:
+            return jsonify({"error": "Not Found", "message": f"Customer with id {customerId} not found"}), 404
+        
+        if not data.get("name"):
+            data["name"] = customer.name
+
+        if not data.get("gstno"):
+            data["gstno"] = customer.gstno
+
+        if not data.get("address"):
+            data["address"] = customer.address
+
+        if not data.get("phone_no"):
+            data["phone_no"] = customer.phone_no
+
+        if not data.get("email"):
+            data["email"] = customer.email
+
+        customer.name = data["name"]
+        customer.gstno = data["gstno"]
+        customer.address = data["address"]
+        customer.phone_no = data["phone_no"]
+        customer.email = data["email"]
+
+        session.commit()
+        result = {
+            "c_id" : customer.c_id,
+            "name": customer.name,
+            "gstno": customer.gstno,
+            "address": customer.address,
+            "phone_no": customer.phone_no,
+            "email": customer.email
+        }
+
+        return jsonify(result), 200
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": "Failed to update customer", "message": str(e)}), 500
+    finally:
+        session.close()
+
+@app.route("/api/customers/<int:customerId>" , methods=["DELETE"])
+def deleteCustomer(customerId):
+    session = get_session()
+    try:
+        customer = session.query(Customer).filter_by(c_id = customerId).first()
+        if not customer:
+            return jsonify({"error": "Not Found", "message": f"customer with id {customerId} not found"}), 404
+
+        session.delete(customer)
+        session.commit()
+        
+        remaining_customers = session.query(Customer).all()
+        result = [
+            {
+                "c_id": remaining_customer.c_id,
+                "name": remaining_customer.name,
+                "gstno": remaining_customer.gstno,
+                "address": remaining_customer.address,
+                "phone_no": remaining_customer.phone_no,
+                "email": remaining_customer.email
+            }
+            for remaining_customer in remaining_customers
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": "Failed to delete customer", "message": str(e)}), 500
+    finally:
+        session.close()
 
 # Error handlers
 @app.errorhandler(404)
