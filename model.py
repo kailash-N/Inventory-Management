@@ -5,15 +5,16 @@ from datetime import datetime
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.engine import URL
 
+DATABASE_URL="postgresql://postgres:i0Z8jha2M0RgDDyF@db.qzleirzfkdjbvozhptxi.supabase.co:5432/postgres"
 
-DATABASE_URL = URL.create(
-    drivername="postgresql+psycopg2",
-    username="postgres",
-    password="--------",
-    host="db.qzleirzfkdjbvozhptxi.supabase.co", 
-    port=5432,
-    database="postgres"
-)
+# DATABASE_URL = URL.create(
+#     drivername="postgresql+psycopg2",
+#     username="postgres",
+#     password="i0Z8jha2M0RgDDyF",
+#     host="db.qzleirzfkdjbvozhptxi.supabase.co", 
+#     port=5432,
+#     database="postgres"
+# )
 engine = create_engine(DATABASE_URL)
 
 # Test the connection
